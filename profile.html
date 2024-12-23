@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Upload File</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .cont {
+            margin: 0 300px;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .content {
+            flex: 1;
+        }
+        h1 {
+            margin: 0 auto;
+        }
+        .health-param1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            p {
+                font-size: 25px;
+            }
+
+        }
+        .header1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .health-vals1 {
+            margin: 0 0 100px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Выйти</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {#  <div class="content container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title text-center mb-4">Upload File</h1>
+                            <form action="/upload" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="title">Title:</label>
+                                    <input type="text" class="form-control" id="title" name="title" required>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="files">Select files:</label>
+                                    <input type="file" class="form-control-file" id="files" name="files" multiple required>
+                                </div><br>
+                                <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> #}
+
+        <div class="health-vals1">
+            <h1 class="header1">Мои показатели здоровья</h1>
+
+            <div class="cont">
+                <div class="health-param1">
+                    <p>Кровь</p>
+                    <div style="height: 500px">
+                        <canvas id="BloodChart"></canvas>
+                    </div>
+                </div>
+                <div class="health-param1">
+                    <p>Вес</p>
+                    <div style="height: 500px">
+                        <canvas id="WeightChart"></canvas>
+                    </div>
+                </div>
+                <div class="health-param1">
+                    <p>Давление</p>
+                    <div style="height: 500px">
+                        <canvas id="PressureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+
+
+
+
+        <footer class="bg-dark text-white text-center py-3">
+            <div class="container">
+                <p>&copy; 2024 Health. Все права защищены.</p>
+                <p>
+                    <a href="#" class="text-white">Privacy Policy</a> |
+                    <a href="#" class="text-white">Terms of Service</a>
+                </p>
+                <p>
+                    Контакты: <a href="mailto:info@yourwebsite.com" class="text-white">info@yourwebsite.com</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script>
+        function makeChart(id, labels, data_, name, bord_color) {
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: name,
+                    backgroundColor: bord_color,
+                    borderColor: bord_color,
+                    data: data_,
+                }]
+            };
+    
+            const config = {
+                type: 'line',
+                data: data,
+                options: { maintainAspectRatio: false }
+            };
+    
+            const myChart = new Chart(
+                document.getElementById(id),
+                config
+            );
+        }
+
+        var labels_blood = {{ labels_blood | tojson}};
+        var data_blood = {{ data | tojson}};
+        makeChart("BloodChart", labels_blood, data_blood, "Blood", bord_color="rgb(255, 99, 132)");
+
+        var labels_blood = {{ labels_blood | tojson}};
+        var data_blood = {{ data | tojson}};
+        makeChart("WeightChart", labels_blood, data_blood, "Weight", bord_color="rgb(0, 99, 132)");
+
+        var labels_blood = {{ labels_blood | tojson}};
+        var data_blood = {{ data | tojson}};
+        makeChart("PressureChart", labels_blood, data_blood, "Pressure", bord_color="rgb(70, 200, 132)");
+    </script>
+</body>
+</html>
